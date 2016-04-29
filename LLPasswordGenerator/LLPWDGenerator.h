@@ -6,6 +6,22 @@
 //  Copyright © 2016年 AnarL. All rights reserved.
 //
 
+#define ZERO_TO_NINE @"0123456789"
+
+#define SPECIAL_CHARACTERS @"!@#$%^&*(),.;'\" []\\{}/-+~`_="
+
+#define ZERO_TO_F_LOWER @"0123456789abcdef"
+
+#define ZERO_TO_F_UPPER @"0123456789ABCDEF"
+
+#define LOWER_CHARACTERS @"abcdefghijklmnopqrstuvwxyz"
+
+#define UPPER_CHARACTERS @"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+#define BINARY_NUMBERS @"01"
+
+#define OCTONARY_NUMBERS @"1234567"
+
 typedef enum{
     
     NumberZeroToNine = 100,
@@ -50,12 +66,12 @@ typedef enum{
 
 + (instancetype)defaultGenerator;
 
-- (NSString *)generatePasswordWithType:(PasswordType)type length:(PasswordLength)length;
-
 - (NSString *)generatePasswordWithCharacters:(NSString *)characterString length:(PasswordLength)length;
 
-- (NSString *)generatePasswordWithType:(PasswordType)type pwdLength:(NSInteger)length;
-
 - (NSString *)generatePasswordWithCharacters:(NSString *)characterString pwdLength:(NSInteger)length;
+
+- (NSString *)generatePasswordWithTypes:(NSArray *)types length:(PasswordLength)length;
+
+- (NSString *)generatePasswordWithTypes:(NSArray *)types pwdLength:(NSInteger)pwdLength;
 
 @end

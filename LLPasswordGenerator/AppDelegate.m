@@ -10,12 +10,15 @@
 
 @interface AppDelegate ()
 {
+    NSArray * _types;
+    
     NSArray * _charactersTypes;
     NSArray * _passwordLengths;
     
     PasswordType _type;
     PasswordLength _length;
     
+    NSMutableArray * _argumentsArray;
 }
 
 @property (weak) IBOutlet NSWindow *window;
@@ -32,6 +35,8 @@
 
 - (BOOL)setup
 {
+    _argumentsArray = [NSMutableArray array];
+    
     self.inputChar.hidden = YES;
     self.pwdTextfield.hidden = YES;
     self.unitLabel.hidden = YES;
@@ -68,6 +73,8 @@
     self.pwd1024.tag = Characters1024;
     self.pwdUndefine.tag = CharactersUndefined;
     
+    _types = @[ZERO_TO_NINE, SPECIAL_CHARACTERS, ZERO_TO_F_LOWER, ZERO_TO_F_UPPER, LOWER_CHARACTERS, UPPER_CHARACTERS, BINARY_NUMBERS, OCTONARY_NUMBERS];
+    
     _length = Characters5;
     
     _charactersTypes = @[_number029, _specialCharacter, _number02f, _number02F, _a2zchar, _A2Zchar, _binary, _octonary, _selfDefine];
@@ -83,16 +90,24 @@
 
 - (IBAction)setupCharacters:(NSButton *)sender
 {
-    if (sender.tag != SelfDefinedCharacters) {
-        self.inputChar.hidden = YES;
+    if (sender == self.selfDefine) {
+        self.inputChar.hidden = !sender.state;
+        for (NSButton * btn in _charactersTypes) {
+            if (btn != sender) {
+                btn.state = 0;
+            }
+        }
     } else {
-        self.inputChar.hidden = NO;
+        self.selfDefine.state = 0;
+        self.inputChar.hidden = !self.selfDefine.state;
     }
+#if 0
     for (NSButton * btn in _charactersTypes) {
         btn.state = 0;
     }
     sender.state = 1;
     _type = (PasswordType)sender.tag;
+#endif
 }
 
 - (IBAction)setupPasswordLength:(NSButton *)sender
@@ -113,8 +128,36 @@
 
 - (IBAction)generatePassword:(NSButton *)sender {
     
+    if ([_argumentsArray count] != 0) {
+        [_argumentsArray removeAllObjects];
+    }
+    
     LLPWDGenerator * generator = [LLPWDGenerator defaultGenerator];
     
+    for (NSButton * btn in _charactersTypes) {
+        if (btn.state == 1) {            
+            if (btn == self.selfDefine) {
+                [_argumentsArray addObject:self.inputChar.stringValue];
+            } else {
+                [_argumentsArray addObject:_types[(PasswordType)btn.tag - NumberZeroToNine]];
+            }
+        }
+    }
+    
+    if (_length == CharactersUndefined) {
+        if ([self.pwdTextfield.stringValue isEqualToString:@""]) {
+            NSAlert * alert = [NSAlert alertWithMessageText:@"Please input your password length." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+            [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+                
+            }];
+        } else {
+                        self.passwordResult.string = [generator generatePasswordWithTypes:_argumentsArray pwdLength:self.pwdTextfield.integerValue];
+        }
+    } else {
+        self.passwordResult.string = [generator generatePasswordWithTypes:_argumentsArray length:_length];
+    }
+    
+#if 0
     if (_type == SelfDefinedCharacters && _length == CharactersUndefined) {
         if ([self.inputChar.stringValue isEqualToString:@""]) {
             NSAlert * alert = [NSAlert alertWithMessageText:@"Please input what characters you want to create password from." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
@@ -141,11 +184,19 @@
                 
             }];
         } else {
-            self.passwordResult.string = [generator generatePasswordWithType:_type pwdLength:self.pwdTextfield.integerValue];
+//            self.passwordResult.string = [generator generatePasswordWithType:_type pwdLength:self.pwdTextfield.integerValue];
         }
     } else {
-        self.passwordResult.string = [generator generatePasswordWithType:_type length:_length];
+//        self.passwordResult.string = [generator generatePasswordWithType:_type length:_length];
     }
+#endif
+}
+
+#pragma mark -Close
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+    return YES;
 }
 
 @end

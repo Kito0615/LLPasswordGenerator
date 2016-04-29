@@ -1,1 +1,3 @@
 #LLPasswordGenerator
+
+Create password automatically.
