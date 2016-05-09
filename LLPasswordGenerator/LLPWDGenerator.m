@@ -34,22 +34,42 @@
     return instance;
 }
 
-- (NSString *)generatePasswordWithCharacters:(NSString *)characterString length:(PasswordLength)length
-{
-    return [self generatePasswordWithCharacters:characterString pwdLength:[_lengths[length - Characters5] integerValue]];
-}
-
 -(NSString *)generatePasswordWithCharacters:(NSString *)characterString pwdLength:(NSInteger)length
 {
+    NSDate * now = [NSDate date];
+    
+    NSTimeInterval st = [now timeIntervalSince1970];
+    
+    NSMutableArray * arr = [NSMutableArray array];
+    
+    for (int i = 0; i < characterString.length; i ++) {
+        char ch = [characterString characterAtIndex:i];
+        
+        [arr addObject:[NSString stringWithFormat:@"%c", ch]];
+    }
+    
+    NSSet * set = [NSSet setWithArray:arr];
+    
+    NSMutableString * tempStr = [NSMutableString string];
+    
+    for (NSString * str  in set) {
+        [tempStr appendString:str];
+    }
+    
     NSMutableString * result = [NSMutableString string];
     
     for (int i = 0; i < length; i ++) {
         
-        int index = arc4random() % characterString.length;
+        int index = arc4random() % tempStr.length;
         
-        [result appendFormat:@"%c", [characterString characterAtIndex:index]];
+        [result appendFormat:@"%c", [tempStr characterAtIndex:index]];
         
     }
+    
+    now = [NSDate date];
+    NSTimeInterval fi = [now timeIntervalSince1970];
+    
+    NSLog(@"%lf", fi - st);
     
     return result;
 }

@@ -156,40 +156,6 @@
     } else {
         self.passwordResult.string = [generator generatePasswordWithTypes:_argumentsArray length:_length];
     }
-    
-#if 0
-    if (_type == SelfDefinedCharacters && _length == CharactersUndefined) {
-        if ([self.inputChar.stringValue isEqualToString:@""]) {
-            NSAlert * alert = [NSAlert alertWithMessageText:@"Please input what characters you want to create password from." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-            [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-                
-            }];
-        } else {
-            self.passwordResult.string = [generator generatePasswordWithCharacters:self.inputChar.stringValue pwdLength:self.pwdTextfield.integerValue];
-        }
-    } else if (_type == SelfDefinedCharacters && _length != CharactersUndefined) {
-        if ([self.inputChar.stringValue isEqualToString:@""]) {
-            NSAlert * alert = [NSAlert alertWithMessageText:@"Please input what characters you want to create password from." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-            [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-                
-            }];
-        } else {
-            self.passwordResult.string = [generator generatePasswordWithCharacters:self.inputChar.stringValue length:_length];
-        }
-        
-    } else if (_type != SelfDefinedCharacters && _length == CharactersUndefined){
-        if ([self.pwdTextfield.stringValue isEqualToString:@""]) {
-            NSAlert * alert = [NSAlert alertWithMessageText:@"Please input your password length." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
-            [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-                
-            }];
-        } else {
-//            self.passwordResult.string = [generator generatePasswordWithType:_type pwdLength:self.pwdTextfield.integerValue];
-        }
-    } else {
-//        self.passwordResult.string = [generator generatePasswordWithType:_type length:_length];
-    }
-#endif
 }
 
 #pragma mark -Close

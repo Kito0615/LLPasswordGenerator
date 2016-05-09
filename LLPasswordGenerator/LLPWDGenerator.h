@@ -66,10 +66,6 @@ typedef enum{
 
 + (instancetype)defaultGenerator;
 
-- (NSString *)generatePasswordWithCharacters:(NSString *)characterString length:(PasswordLength)length;
-
-- (NSString *)generatePasswordWithCharacters:(NSString *)characterString pwdLength:(NSInteger)length;
-
 - (NSString *)generatePasswordWithTypes:(NSArray *)types length:(PasswordLength)length;
 
 - (NSString *)generatePasswordWithTypes:(NSArray *)types pwdLength:(NSInteger)pwdLength;
